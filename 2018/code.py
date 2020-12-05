@@ -106,7 +106,8 @@ for line in open('code.txt', 'r').readlines():
 for code in codes:
     for fn in funcs:
         if (fn(code.before, code.code[1], code.code[2]) == code.after[code.code[3]]):
-            rght += 1
+            #rght += 1
+            print('WTF')
         else:
             pc[funcs.index(fn)][code.code[0]] = False
 

@@ -6,6 +6,7 @@ def count_trees_on_slope(map, slope_x, slope_y):
     posy = 0
 
     tree_count = 0
+    print(wrap)
     while posy < len(map):
         if posx >= wrap:
             posx -= wrap
@@ -18,7 +19,7 @@ def count_trees_on_slope(map, slope_x, slope_y):
     return tree_count
 
 
-for line in open('03.txt', 'r').readlines():
+for line in open('03smoulla.txt', 'r').readlines():
     map.append(line.rstrip())
 
 
