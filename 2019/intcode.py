@@ -90,5 +90,3 @@ class Parostroj:
         elif op_code == 9:
             self.base += self.parameter(pos, 1)
             return pos + 2
-
-print(Parostroj('109,1,204,-1,1001,100,1,100,1008,100,16,101,1006,101,0,99').run())
