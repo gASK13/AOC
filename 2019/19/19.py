@@ -78,4 +78,3 @@ while True:
 
 # D'oh! subtract 99!
 print((cur_x - 99) * 10000 + cur_y)
-11000825
