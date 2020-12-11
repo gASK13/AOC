@@ -7,6 +7,7 @@ class Parostroj:
         self.output_processor = output_processor if output_processor is not None else lambda x: self.output.append(x)
         self.output = None if output_processor is not None else []
         self.base = 0
+        self.pos = 0
 
     def pad_program(self, length):
         if length >= len(self.program):
@@ -24,15 +25,17 @@ class Parostroj:
         if input_array is not None:
             self.input_provider = lambda: input_array.pop(0)
 
-        pos = 0
+        self.pos = 0
         while True:
-            if self.safe_get(pos) == 99:
+            if self.safe_get(self.pos) == 99:
                 return self.output
-            pos = self.instruction(pos)
+            self.step()
             if stop_check is not None:
                 if stop_check():
                     return self.output
 
+    def step(self):
+        self.pos = self.instruction(self.pos)
 
     @staticmethod
     def digit(n, d):
