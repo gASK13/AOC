@@ -4,18 +4,17 @@
 
 
 def position_into_new_stack(_size, _position):
-    return _size - (_position + 1)
+    return -(_position + 1)
 
 
 def position_cut_n(_size, _n, _position):
-    return (_position + _n) % _size
+    return _position + _n
 
 
 def position_deal_n(_size, _n, _position):
-    pos = _position
-    while pos % _n != 0:
-        pos += _size
-    return pos // _n
+    while _position % _n != 0:
+        _position += _size
+    return _position // _n
 
 
 def find_source_position(_size, _rules, _position):
@@ -31,7 +30,7 @@ def find_source_position(_size, _rules, _position):
             n = int(line.split(' ')[-1])
             pos = position_cut_n(_size, n ,pos)
     _rules.reverse()
-    return pos
+    return pos % _size
 
 
 ########## PART ONE METHODS ################
