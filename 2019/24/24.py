@@ -1,3 +1,7 @@
+def build_level():
+    return [['.' for x in range(0, 5)] for y in range(0, 5)]
+
+
 def parse_map(_file):
     map = []
     for line in open(_file, 'r').readlines():
@@ -6,7 +10,9 @@ def parse_map(_file):
 
 
 def print_map(_map):
-    print(hash_map(_map, '\n'))
+    for key in _map.keys():
+        print('Level {}'.format(key))
+        print(hash_map(_map[key], '\n'))
 
 
 def hash_map(_map, _char=''):
@@ -14,47 +20,67 @@ def hash_map(_map, _char=''):
 
 
 def biodiversity(_map):
-    val = 1
     bio = 0
-    for line in _map:
-        for char in line:
-            if char == '#':
-                bio += val
-            val *= 2
+    for key in _map.keys():
+        for line in _map[key]:
+            for char in line:
+                if char == '#':
+                    bio += 1
     return bio
 
 
 def step(_map):
-    count_map = [[0 for c in line] for line in _map]
-    for (y, line) in enumerate(_map):
-        for (x, char) in enumerate(line):
-            if char == '#':
-                for (dx, dy) in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
-                    if (0 <= x + dx < len(line)) & (0 <= y + dy < len(_map)):
-                        count_map[y + dy][x + dx] += 1
+    counts = {}
+    fill_levels = set()
+    for z in _map.keys():
+        for (y, line) in enumerate(_map[z]):
+            for (x, char) in enumerate(line):
+                if char == '#':
+                    for (dx, dy) in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                        if (0 <= x + dx < len(line)) & (0 <= y + dy < len(_map[z])) & ((y + dy != 2) | (x + dx != 2)):
+                            if (z, y + dy, x + dx) not in counts:
+                                counts[(z, y + dy, x + dx)] = 0
+                            counts[(z, y + dy, x + dx)] += 1
+                        elif (y + dy == 2) & (x + dx == 2):
+                            if z - 1 not in _map:
+                                fill_levels.add(z - 1)
+                            if dy != 0:
+                                for ddx in range(0, 5):
+                                    if (z - 1, 0 if dy == 1 else 4, ddx) not in counts:
+                                        counts[(z - 1, 0 if dy == 1 else 4, ddx)] = 0
+                                    counts[(z - 1, 0 if dy == 1 else 4, ddx)] += 1
+                            else:
+                                for ddy in range(0, 5):
+                                    if (z - 1, ddy, 0 if dx == 1 else 4) not in counts:
+                                        counts[(z - 1, ddy, 0 if dx == 1 else 4)] = 0
+                                    counts[(z - 1, ddy, 0 if dx == 1 else 4)] += 1
+                        else:
+                            if z + 1 not in _map:
+                                fill_levels.add(z + 1)
+                            if (z + 1, 2 + dy, 2 + dx) not in counts:
+                                counts[(z + 1, 2 + dy, 2 + dx)] = 0
+                            counts[(z + 1, 2 + dy, 2 + dx)] += 1
 
-    for (y, line) in enumerate(_map):
-        for (x, char) in enumerate(line):
-            if (char == '#') & (count_map[y][x] != 1):
-                line[x] = '.'
-            elif (char == '.') & (1 <= count_map[y][x] <= 2):
-                line[x] = '#'
+    for z in fill_levels:
+        _map[z] = build_level()
 
+    for z in _map.keys():
+        for (y, line) in enumerate(_map[z]):
+            for (x, char) in enumerate(line):
+                if (z, y, x) not in counts:
+                    counts[(z, y, x)] = 0
+                if (char == '#') & (counts[(z, y, x)] != 1):
+                    line[x] = '.'
+                elif (char == '.') & (1 <= counts[(z, y, x)] <= 2):
+                    line[x] = '#'
 
-map = parse_map('24.txt')
-hashes = {hash_map(map)}
-print('init')
+map = {}
+map[0] = parse_map('24.txt')
 print_map(map)
-i = 0
-while True:
-    i += 1
+
+for i in range(0, 200):
     step(map)
-    h = hash_map(map)
     print('\n{} minute'.format(i))
     print_map(map)
-    if h in hashes:
-        print('WOOT!')
-        print(biodiversity(map))
-        break
-    else:
-        hashes.add(hash_map(map))
+
+print(biodiversity(map))
