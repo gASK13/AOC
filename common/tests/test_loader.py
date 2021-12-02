@@ -23,3 +23,8 @@ class TestLoader(unittest.TestCase):
         matrix = Loader.load_matrix('data/matrix_nums_empty.txt', numeric=True)
         result = [[1, 2, 3, 4], [4, 5, 3, 4], [], [1, 2], [1, 2], [], [5]]
         assert matrix == result
+
+    def test_load_lines(self):
+        matrix = Loader.load_lines('data/lines_nums.txt', numeric=True)
+        result = [1, 2, 3, 5, 9, 21, 5, 6]
+        assert matrix == result

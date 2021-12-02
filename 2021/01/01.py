@@ -1,9 +1,8 @@
-num = []
+from common.loader import Loader
+
+num = Loader.load_lines(numeric=True)
 inc = 0
 windows_size = 3
-for line in open('input.txt', 'r').readlines():
-    nEntry = int(line)
-    num.append(nEntry)
 
 for i in range(windows_size + 1, len(num) + 1):
     if sum(num[i-windows_size:i]) > sum(num[i - windows_size-1:i-1]):

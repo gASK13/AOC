@@ -1,17 +1,34 @@
 import re
+import os
+import __main__
+from aocd import get_data
 
 
 class Loader:
 
     @staticmethod
-    def load_matrix(filename, delimiter=None, numeric=False):
-        matrix = []
-        with open(filename, 'r') as file:
-            for line in file.readlines():
-                if delimiter is None:
-                    split = line.strip()
-                else:
-                    split = re.split(delimiter, line.strip())
-                matrix.append([int(x) if numeric else x for x in split])
-        return matrix
+    def get_input(numeric=False):
+        day = int(os.path.basename(__main__.__file__).split('.')[0])
+        year = (os.path.basename(os.path.dirname(os.path.dirname(__main__.__file__))))
+        data = get_data(day=day, year=year).splitlines()
+        return [int(x) for x in data] if numeric else data
 
+    @staticmethod
+    def load_lines(filename=None, numeric=False):
+        if filename is None:
+            return Loader.get_input(numeric=numeric)
+        with open(filename, 'r') as file:
+            if numeric:
+                return [int(x.strip()) for x in file.readlines()]
+            return [x.strip() for x in file.readlines()]
+
+    @staticmethod
+    def load_matrix(filename=None, delimiter=None, numeric=False):
+        matrix = []
+        for line in Loader.load_lines(filename):
+            if delimiter is None:
+                split = line.strip()
+            else:
+                split = re.split(delimiter, line.strip())
+            matrix.append([int(x) if numeric else x for x in split])
+        return matrix
