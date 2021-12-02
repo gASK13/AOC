@@ -7,16 +7,16 @@ from aocd import get_data
 class Loader:
 
     @staticmethod
-    def get_input(numeric=False):
-        day = int(os.path.basename(__main__.__file__).split('.')[0])
-        year = (os.path.basename(os.path.dirname(os.path.dirname(__main__.__file__))))
-        data = get_data(day=day, year=year).splitlines()
-        return [int(x) for x in data] if numeric else data
+    def transform_lines(transformer, filename=None):
+        return [transformer(line=line) for line in Loader.load_lines(filename=filename)]
 
     @staticmethod
     def load_lines(filename=None, numeric=False):
         if filename is None:
-            return Loader.get_input(numeric=numeric)
+            day = int(os.path.basename(__main__.__file__).split('.')[0])
+            year = (os.path.basename(os.path.dirname(os.path.dirname(__main__.__file__))))
+            data = get_data(day=day, year=year).splitlines()
+            return [int(x) for x in data] if numeric else data
         with open(filename, 'r') as file:
             if numeric:
                 return [int(x.strip()) for x in file.readlines()]
