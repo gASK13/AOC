@@ -1,17 +1,18 @@
 import common
 
 test_data = {
-    'be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe' : 8394,
-    'edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc' : 9781,
-    'fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg' : 1197,
-    'fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd cedba gadfec cb' : 9361,
-    'aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga | gecf egdcabf bgf bfgea' : 4873,
-    'fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf | gebdcfa ecba ca fadegcb' : 8418,
-    'dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbcadfe' : 4548,
-    'bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef' : 1625,
-    'egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb' : 8717,
-    'gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce' : 4315
+    'be cfbegad cbdgef fgaecd cgeb fdcge agebfd fecdb fabcd edb | fdgacbe cefdb cefbgd gcbe': 8394,
+    'edbfga begcd cbg gc gcadebf fbgde acbgfd abcde gfcbed gfec | fcgedb cgb dgebacf gc': 9781,
+    'fgaebd cg bdaec gdafb agbcfd gdcbef bgcad gfac gcb cdgabef | cg cg fdcagb cbg': 1197,
+    'fbegcd cbd adcefb dageb afcb bc aefdc ecdab fgdeca fcdbega | efabcd cedba gadfec cb': 9361,
+    'aecbfdg fbg gf bafeg dbefa fcge gcbea fcaegb dgceab fcbdga | gecf egdcabf bgf bfgea': 4873,
+    'fgeab ca afcebg bdacfeg cfaedg gcfdb baec bfadeg bafgc acf | gebdcfa ecba ca fadegcb': 8418,
+    'dbcfg fgd bdegcaf fgec aegbdf ecdfab fbedc dacgb gdcebf gf | cefg dcbef fcge gbcadfe': 4548,
+    'bdfegc cbegaf gecbf dfcage bdacg ed bedf ced adcbefg gebcd | ed bcgafe cdgba cbgef': 1625,
+    'egadfb cdbfeg cegd fecab cgb gbdefca cg fgcdab egfdb bfceg | gbdfcae bgc cg cgb': 8717,
+    'gcafb gcf dcaebfg ecagb gf abcdeg gaef cafbge fdbac fegbdc | fgae cfgab fg bagce': 4315
 }
+
 
 def count_1478(line):
     data = line.split(' | ')[1].split(' ')
@@ -20,7 +21,8 @@ def count_1478(line):
 
 def decode_line(line):
     # prepare and sort data
-    training = set([''.join(sorted(item)) for item in line.split(' | ')[0].split(' ') + line.split(' | ')[1].split(' ')])
+    training = set(
+        [''.join(sorted(item)) for item in line.split(' | ')[0].split(' ') + line.split(' | ')[1].split(' ')])
     data = [''.join(sorted(item)) for item in line.split(' | ')[1].split(' ')]
 
     # translate "easy ones"
@@ -53,12 +55,14 @@ def decode_line(line):
             translate[item] = 9
     return int(''.join([str(translate[d]) for d in data]))
 
+
 print('PART ONE:')
 print('{}, expected {}'.format(sum([count_1478(line) for line in test_data]), 26))
 print('Real solution {}'.format(sum([count_1478(line) for line in common.Loader.load_lines()])))
 
 print('PART TWO:')
-print('{}, expected {}'.format(decode_line('acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf'), 5353))
+print('{}, expected {}'.format(
+    decode_line('acedgfb cdfbe gcdfa fbcad dab cefabd cdfgeb eafb cagedb ab | cdfeb fcadb cdfeb cdbaf'), 5353))
 for line in test_data:
     print('{}, expected {}'.format(decode_line(line), test_data[line]))
 print('SUM {}, expected {}'.format(sum([decode_line(line) for line in test_data]), 61229))
