@@ -22,9 +22,9 @@ class Matrix:
         return len(self.matrix)
 
     def print(self):
-        for line in [''.join(['#' if (i, j) in self.matrix else ' ' for i in range(1 + max([x for x, y in self.matrix]))])
-                     for j in range(1 + max([y for x, y in self.matrix]))]:
-            print(line)
+        print('\n'.join(
+            [''.join(['#' if (i, j) in self.matrix else ' ' for i in range(1 + max([x for x, y in self.matrix]))])
+             for j in range(1 + max([y for x, y in self.matrix]))]))
 
 
 def run(lines):
