@@ -5,7 +5,12 @@ class Instruction:
     def __init__(self, line):
         split = line.split(' ')
         self.op = split[0]
-        self.reg = split[1]
+        try:
+            self.reg = None
+            self.reg_val = int(split[1])
+        except:
+            self.reg = split[1]
+            self.reg_val = None
         self.param = None
         self.value = None
         if len(split) > 2:
@@ -13,6 +18,12 @@ class Instruction:
                 self.value = int(split[2])
             except:
                 self.param = split[2]
+
+    def get_reg_value(self, mem):
+        if self.reg_val is not None:
+            return self.reg_val
+        if self.reg is not None:
+            return mem.get_value(self.reg)
 
     def get_value(self, mem):
         if self.value is not None:
@@ -86,9 +97,9 @@ class Program:
                 if len(self.queue) == 0:
                     self.waiting = True
                     return
-                self.mem.set_value(instruction.reg, self.queue.pop())
+                self.mem.set_value(instruction.reg, self.queue.pop(0))
             case 'jgz':
-                if self.mem.get_value(instruction.reg) > 0:
+                if instruction.get_reg_value(self.mem) > 0:
                     self.ptr -= 1
                     self.ptr += instruction.get_value(self.mem)
         self.ptr += 1
@@ -121,14 +132,11 @@ def run_two_programs(_prgrm):
         if program0.terminated and program1.terminated:
             print("TERMINATED")
             return program1.send_count
-        #print(f'Step counts {program0.step_count} / {program1.step_count}')
-        #print(f'Send counts {program0.send_count} / {program1.send_count}')
-        #print(f'Ptr {program0.ptr} / {program1.ptr}')
-        #print(f'Queue lengths {len(program0.queue)} / {len(program1.queue)}')
 
 
 print(f'Test = {run_program(common.Loader.transform_lines(Instruction, "test.txt"))} (expected 4)')
 print(f'Real = {run_program(common.Loader.transform_lines(Instruction))}')
 
+# Looks good, does not work :(
 print(f'Test = {run_two_programs(common.Loader.transform_lines(Instruction, "test_parallel.txt"))}')
 print(f'Test = {run_two_programs(common.Loader.transform_lines(Instruction))}')
