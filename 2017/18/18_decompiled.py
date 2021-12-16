@@ -1,6 +1,6 @@
 def sort_step(s):
     sn = []
-    a = s.pop()
+    a = s.pop(0)
     xs = False
     for b in s:
         if b > a:
@@ -20,13 +20,14 @@ s0 = [6142, 3291, 2270, 3551, 6243, 7724, 8606, 4149, 5014, 4268, 9066, 8617, 47
 cnt = 0
 p1 = True
 while s0 != sorted(s0):
-    so, brk = sort_step(s0)
+    s0, brk = sort_step(s0)
     if p1:
         cnt += 127
     p1 = not p1
-    print(p1, cnt)
+    print(s0)
     if not brk:
         break
 
 print(cnt)
-# Not accurate, why?
+# this is another way to do it :D
+
