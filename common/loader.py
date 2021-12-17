@@ -11,7 +11,7 @@ class Loader:
         return [transformer(line=line) for line in Loader.load_lines(filename=filename)]
 
     @staticmethod
-    def load_lines(filename=None, numeric=False):
+    def load_lines(filename=None, numeric=False, strip=True):
         if filename is None:
             day = int(os.path.basename(__main__.__file__).split('.')[0])
             year = (os.path.basename(os.path.dirname(os.path.dirname(__main__.__file__))))
@@ -20,7 +20,7 @@ class Loader:
         with open(filename, 'r') as file:
             if numeric:
                 return [int(x.strip()) for x in file.readlines()]
-            return [x.strip() for x in file.readlines()]
+            return [x.strip() if strip else x.strip('\n') for x in file.readlines()]
 
     @staticmethod
     def load_matrix(filename=None, delimiter=None, numeric=False):

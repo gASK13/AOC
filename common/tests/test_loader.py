@@ -28,3 +28,9 @@ class TestLoader(unittest.TestCase):
         matrix = Loader.load_lines('data/lines_nums.txt', numeric=True)
         result = [1, 2, 3, 5, 9, 21, 5, 6]
         assert matrix == result
+
+    def test_load_nostrip(self):
+        matrix = Loader.load_lines('data/lines_nostrip.txt', strip=False)
+        result = ['   |  ', ' 12 34', '12AB  ', '      ', ' - - -', '- - - ']
+        print(matrix)
+        assert matrix == result
