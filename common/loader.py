@@ -11,6 +11,19 @@ class Loader:
         return [transformer(line=line) for line in Loader.load_lines(filename=filename)]
 
     @staticmethod
+    def transform_lines_complex(transformer, limit='',filename=None):
+        results = []
+        lines = []
+        for line in Loader.load_lines(filename=filename):
+            if line == limit:
+                results.append(transformer(lines=lines))
+                lines = []
+            else:
+                lines.append(line)
+        results.append(transformer(lines=lines))
+        return results
+
+    @staticmethod
     def load_lines(filename=None, numeric=False, strip=True):
         if filename is None:
             day = int(os.path.basename(__main__.__file__).split('.')[0])
