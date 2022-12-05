@@ -11,10 +11,10 @@ class Loader:
         return [transformer(line=line) for line in Loader.load_lines(filename=filename)]
 
     @staticmethod
-    def transform_lines_complex(transformer, limit='',filename=None):
+    def transform_lines_complex(transformer, limit='',filename=None, strip=True):
         results = []
         lines = []
-        for line in Loader.load_lines(filename=filename):
+        for line in Loader.load_lines(filename=filename, strip=strip):
             if line == limit:
                 results.append(transformer(lines=lines))
                 lines = []
