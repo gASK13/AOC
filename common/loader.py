@@ -26,7 +26,7 @@ class Loader:
     @staticmethod
     def load_lines(filename=None, numeric=False, strip=True):
         if filename is None:
-            day = int(os.path.basename(__main__.__file__).split('.')[0])
+            day = int(os.path.basename(__main__.__file__).split('.')[0].split('_')[0])
             year = (os.path.basename(os.path.dirname(os.path.dirname(__main__.__file__))))
             data = get_data(day=day, year=year).splitlines()
             return [int(x) for x in data] if numeric else data
