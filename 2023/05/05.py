@@ -18,6 +18,41 @@ def convert_value(mapping, source):
     return source
 
 
+def break_ranges(source_map, ranges):
+    # source_map ranges are include on both ends
+    # ranges in data are inclusive on both ends
+    retranges = []
+    while len(ranges) > 0:
+        start, end = ranges.pop()
+        found = False
+        for (s_start, s_end), shift in source_map.items():
+            # if it overlaps whole, cool
+            if s_start <= start and s_end >= end:
+                retranges.append((start + shift, end + shift))
+                found = True
+                break
+            elif s_start > start and s_end < end:
+                retranges.append((s_start + shift, s_end + shift))
+                ranges.append((start, s_start - 1))
+                ranges.append((s_end + 1, end))
+                found = True
+                break
+            elif start < s_start <= end <= s_end:
+                retranges.append((s_start + shift, end + shift))
+                ranges.append((start, s_start - 1))
+                found = True
+                break
+            elif s_start <= start <= s_end < end:
+                retranges.append((start + shift, s_end + shift))
+                ranges.append((s_end + 1, end))
+                found = True
+                break
+        # add only when none matched
+        if not found:
+            retranges.append((start, end))
+    return retranges
+
+
 class Almanac:
     def __init__(self, input_lines):
         self.seed_to_soil = {}
@@ -74,48 +109,14 @@ class Almanac:
             ranges.append((start, start + length - 1))
 
         # I want to go through each step in list and break ranges and then recursively call next
-        soils = self.break_ranges(self.seed_to_soil, ranges)
-        fertilizers = self.break_ranges(self.soil_to_fertilizer, soils)
-        waters = self.break_ranges(self.fertilizer_to_water, fertilizers)
-        lights = self.break_ranges(self.water_to_light, waters)
-        temperatures = self.break_ranges(self.light_to_temperature, lights)
-        humidities = self.break_ranges(self.temperature_to_humidity, temperatures)
-        locations = self.break_ranges(self.humidity_to_location, humidities)
+        soils = break_ranges(self.seed_to_soil, ranges)
+        fertilizers = break_ranges(self.soil_to_fertilizer, soils)
+        waters = break_ranges(self.fertilizer_to_water, fertilizers)
+        lights = break_ranges(self.water_to_light, waters)
+        temperatures = break_ranges(self.light_to_temperature, lights)
+        humidities = break_ranges(self.temperature_to_humidity, temperatures)
+        locations = break_ranges(self.humidity_to_location, humidities)
         return min([start for start, end in locations])
-
-    def break_ranges(self, source_map, ranges):
-        # source_map ranges are include on both ends
-        # ranges in data are inclusive on both ends
-        retranges = []
-        while len(ranges) > 0:
-            start, end = ranges.pop()
-            found = False
-            for (s_start, s_end), shift in source_map.items():
-                # if it overlaps whole, cool
-                if s_start <= start and s_end >= end:
-                    retranges.append((start + shift, end + shift))
-                    found = True
-                    break
-                elif s_start > start and s_end < end:
-                    retranges.append((s_start + shift, s_end + shift))
-                    ranges.append((start, s_start - 1))
-                    ranges.append((s_end + 1, end))
-                    found = True
-                    break
-                elif start < s_start <= end <= s_end:
-                    retranges.append((s_start + shift, end + shift))
-                    ranges.append((start, s_start - 1))
-                    found = True
-                    break
-                elif s_start <= start <= s_end < end:
-                    retranges.append((start + shift, s_end + shift))
-                    ranges.append((s_end + 1, end))
-                    found = True
-                    break
-            # add only when none matched
-            if not found:
-                retranges.append((start, end))
-        return retranges
 
 
 a = Almanac(common.Loader.load_lines('test'))
