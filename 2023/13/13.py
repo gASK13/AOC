@@ -39,7 +39,6 @@ class Map:
         self.transposed_map[j][i] = new
 
     def find_smudge(self):
-        print(self)
         _row = 0
         _column = 0
         # try to change all tiles and find reflection
@@ -52,7 +51,6 @@ class Map:
                 self.swap(i, j)
         self.row = _row
         self.column = _column
-        print(self.row, self.column)
 
     def get_value(self, smudge=False):
         if smudge:
