@@ -11,5 +11,14 @@ def gcd(x, y):
 def transpose_matrix(m):
     return [[m[j][i] for j in range(len(m))] for i in range(len(m[0]))]
 
+
+def rotate_matrix_ccw(m):
+    return [[m[j][i] for j in range(len(m))] for i in range(len(m[0]) - 1, -1, -1)]
+
+
+def rotate_matrix_cw(m):
+    return [[m[j][i] for j in range(len(m) - 1, -1, -1)] for i in range(len(m[0]))]
+
+
 # Pathfinding (see 2022/12 or 2016/13)
 # map processing (see above - especially steps and navigation "outside")
