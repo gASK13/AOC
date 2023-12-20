@@ -8,6 +8,10 @@ def gcd(x, y):
     return x
 
 
+def lcm(x, y):
+    return x * y // gcd(x, y)
+
+
 def transpose_matrix(m):
     return [[m[j][i] for j in range(len(m))] for i in range(len(m[0]))]
 
