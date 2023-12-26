@@ -1,7 +1,7 @@
+from colorama import Fore, Back
+from sympy import symbols, solve
+
 import common
-from colorama import Fore, Back, Style
-import sympy as sp
-from sympy import linsolve, symbols, solve, solveset
 
 
 class Hailstone:
@@ -89,7 +89,6 @@ def throw_rock(hailstones):
         for a in range(3):
             eqs.append(hailstones[i].coords[a] - coords[a] + t * (hailstones[i].vectors[a] - vectors[a]))
     retval = solve(eqs, syms)
-    print(retval)
     return retval[0][0], retval[0][1], retval[0][2]
 
 
