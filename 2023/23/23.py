@@ -1,8 +1,5 @@
 import common
 from colorama import Fore, Back, Style
-import plotly.graph_objects as go
-import networkx as nx
-import numpy as np
 
 
 def is_crossroad(_map, x, y):
