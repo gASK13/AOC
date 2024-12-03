@@ -39,8 +39,3 @@ assert part_two(["xmul(2,4)&mul[3,7]!^don't()_mul(5,5)+mul(32,64](mul(11,8)un?mu
 
 print(f'Part two: {part_two(common.Loader.load_lines())}')
 
-
-#122468123 < too high!
-#61294707 < too low
-#117549707 < ALSO NOT????
-
