@@ -64,11 +64,8 @@ class Guard:
                     #self.print_obstacle(*pos)
                     self.obstacles.add(pos)
                 self.end_loop_detection()
-                print(f'Result of LDA at {pos} [{self.map[self.y+dy][self.x+dx]}]: {result}')
             if self.step() == Result.EXIT:
                 break
-        print(f'{self.ox}, {self.oy}')
-        print(self.obstacles)
         return len(self.obstacles)
 
     def step(self):
