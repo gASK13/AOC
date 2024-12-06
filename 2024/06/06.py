@@ -119,5 +119,3 @@ print(f'Part 1: {Fore.BLACK}{Back.GREEN}{Guard(common.Loader.load_matrix()).patr
 assert Guard(common.Loader.load_matrix('test')).find_loop_count() == 6
 
 print(f'Part 2: {Fore.BLACK}{Back.GREEN}{Guard(common.Loader.load_matrix()).find_loop_count()}{Fore.RESET}{Back.RESET}')
-
-# 1685 Is not correct and 1737 is "too high"
