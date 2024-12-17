@@ -75,50 +75,18 @@ def part_one(lines):
 
     return t.get_output()
 
-
-def run_test(i, out):
-    a = i
-    ptr = 0
-    while True:
-        b = (a % 8) ^ 5
-        c = math.trunc(a / pow(2,b))
-        b = b ^ 6
-        a = math.trunc(a / 8)
-        b = b ^ c
-        if b % 8 != out[ptr] or ptr > len(out):
-            return False
-        ptr += 1
-        if a == 0:
-            return ptr > len(out)
-
-def run_one(i):
-    a = i
-    b = (a % 8) ^ 5
-    c = math.trunc(a / pow(2,b))
-    b = b ^ 6
-    b = b ^ c
-    return b % 8
-
-
 def part_two(lines):
-    # 2,4,1,5,7,5,1,6,0,3,4,6,5,5,3,0
-    # OK, so output "tail' is based solely on A!!! (b and C are overwritten)
-    # so we can go from "end" and find all values that produce tail and then add next number (multiply by 8 and add up to 8)!
     a, b, c, program = parse_lines(lines)
+    with open('plant.out', 'w') as the_file:
+        max = 100000000
+        for i in tqdm(range(max)):
+            t = TriBit(i, b, c, program)
+            t.run()
+            the_file.write(f'{i:09d} >> {t.output}\r\n')
+            if t.output == program:
+                return i
+    raise Exception(f"Not found in {max} iterations!")
 
-    # find all As that produce the "tail"
-    # must be 0-7
-    solutions = [0]
-    while len(program) > 0:
-        options = [_ * 8 for _ in solutions]
-        solutions = []
-        next = program.pop()
-        for o in options:
-            for i in range(o, o+8):
-                if run_one(i) == next:
-                    solutions.append(i)
-        print(f'For {next} found {solutions} as options.')
-    return min(solutions)
 
 def parse_lines(lines):
     a = int(lines.pop(0).split(': ')[1])
@@ -132,9 +100,5 @@ def parse_lines(lines):
 assert part_one(common.Loader.load_lines('test')) == '4,6,3,5,6,3,5,2,1,0'
 print(f'Part 1:{Fore.BLACK}{Back.GREEN}{part_one(common.Loader.load_lines())}{Fore.RESET}{Back.RESET}')
 
+assert part_two(common.Loader.load_lines('test_2')) == 117440
 print(f'Part 2:{Fore.BLACK}{Back.GREEN}{part_two(common.Loader.load_lines())}{Fore.RESET}{Back.RESET}')
-
-
-
-
-
