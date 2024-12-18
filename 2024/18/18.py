@@ -30,20 +30,28 @@ def find_path(obstacles, xit):
 
 def part_two(lines, xit=(70,70), limit=1024):
     obstacles = []
-    for i in tqdm(range(len(lines))):
-        x, y = [int(_) for _ in lines[i].split(',')]
-        obstacles.append((x, y))
-        if i > limit:
-            if find_path(obstacles, xit) == -1:
-                # no path
-                return x, y
+    # halve the intervals
+    min = limit
+    max = len(lines)
+    while min != max:
+        sx = min + (max - min) // 2
+        print(f'{min} - {max} : {sx}')
+        if part_one(lines, xit, sx) == -1:
+            if min == sx - 1:
+                print(f'{sx} - {lines[sx-1]}')
+                return lines[sx-1]
+            max = sx
+        else:
+            if max == sx + 1:
+                print(f'{sx} - {lines[sx]}')
+                return lines[sx]
+            min = sx
+
     return None
-
-
 
 assert part_one(common.Loader.load_lines('test'), (6,6), 12) == 22
 print(f'Part 1:{Fore.BLACK}{Back.GREEN}{part_one(common.Loader.load_lines())}{Fore.RESET}{Back.RESET}')
 
-assert part_two(common.Loader.load_lines('test'), (6,6), 12) == (6, 1)
+assert part_two(common.Loader.load_lines('test'), (6,6), 12) == '6,1'
 print(f'Part 2:{Fore.BLACK}{Back.GREEN}{part_two(common.Loader.load_lines())}{Fore.RESET}{Back.RESET}')
 
