@@ -81,10 +81,7 @@ def part_one(matrix, threshold=100):
 
 def part_two(matrix,threshold=100):
     cheats = find_cheats(matrix, 20)
-    #print('\n'.join([f'{c} = {cheats[c]}' for c in cheats if cheats[c] >= threshold]))
-    x = sum([1 for c in cheats if cheats[c] >= threshold])
-    print(x)
-    return x
+    return sum([1 for c in cheats if cheats[c] >= threshold])
 
 
 assert part_one(common.Loader.load_matrix('test'),0) == 44
@@ -113,5 +110,3 @@ assert part_two(common.Loader.load_matrix('test'), 52) == 253
 assert part_two(common.Loader.load_matrix('test'), 50) == 285
 
 print(f'Part 2: {Fore.BLACK}{Back.GREEN}{part_two(common.Loader.load_matrix())}{Style.RESET_ALL}')
-# 932199 IS TOO LOW
-# 953438 IS TOO LOW
