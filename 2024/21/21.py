@@ -44,23 +44,63 @@ def use_keypad(goal):
             position = c
     return results
 
-def find_solutions(goal, iterations=4):
-    results = {goal}
-    for i in range(iterations - 1):
-        print(f'Iteration {i} has {len(results)} results at start...')
-        results2 = set()
-        for r in results: #second robot
-            results2.update(use_keypad(r))
-        smin = min([len(s) for s in results2])
-        results = set([r for r in results2 if len(r) == smin])
-    return results
+def find_solutions(goal, iterations=2):
+    moves = {'A', '<A', 'vA', '>A', '^A', '<<A', 'vvA', '>>A', '^^A', '<vA', '<^A', '>vA', '>^A', 'v<A', 'v>A', '^<A', '^>A',
+                    '<<vA', '<<^A', 'vv<A', 'vv>A', '>>vA', '>>^A', '^^<A', '^^>A',
+                    'v<<A', '^<<A', '<vvA', '>vvA', 'v>>A', '^>>A', '<^^A', '>^^A',
+                    '<<^^A', '<<vvA', 'vv<<A', 'vv>>A', '>>^^A', '>>vvA', '^^<<A', '^^>>A',
+                    '^^^A', '^^^<A', '^^^<<A','^^^>A',
+                    '<^^^A','>^^^A',
+                    'vvvA', 'vvv<A','vvv>A','<vvvA', '>>vvvA'}
+
+    # original needs to be 2 steps!
+    lengths = {}
+    for key in moves:
+        lengths[key] = len(key)
+    for key in moves:
+        lengths[key] = min([len(ir) for r in use_keypad(key) for ir in use_keypad(r)])
+
+    for i in range(iterations-2):
+        new_lengths = {}
+        for key in moves:
+            new_lengths[key] = 999999999999
+            for r in use_keypad(key):
+                # break after each A, but keep the A as part of string
+                buff = ''
+                ln = 0
+                for c in r:
+                    if c == 'A':
+                        ln += lengths[buff+c]
+                        buff = ''
+                    else:
+                        buff += c
+                assert buff == '' #should not end by anything then A
+                if ln < new_lengths[key]:
+                    new_lengths[key] = ln
+        lengths = new_lengths
+
+    smin = 999999999999
+    for r in use_keypad(goal):
+        # break after each A, but keep the A as part of string
+        buff = ''
+        ln = 0
+        for c in r:
+            if c == 'A':
+                ln += lengths[buff + c]
+                buff = ''
+            else:
+                buff += c
+        assert buff == ''  # should not end by anything then A
+        if ln < smin:
+            smin = ln
+    print(smin)
+    return smin
 
 def part_one(lines):
     retval = 0
     for l in lines:
         num = int(l[:-1])
-        sols = find_solutions(l)
-        smin = min([len(s) for s in sols])
+        smin = find_solutions(l)
         retval += smin * num
     return retval
 
@@ -68,12 +108,10 @@ def part_two(lines):
     retval = 0
     for l in lines:
         num = int(l[:-1])
-        sols = find_solutions(l, 27)
-        smin = min([len(s) for s in sols])
+        smin = find_solutions(l, 25)
         retval += smin * num
     return retval
 
-assert '<vA<AA>>^AvAA<^A>Av<<A>>^AvA^A<vA>^Av<<A>^A>AAvA^Av<<A>A>^AAAvA<^A>A' in find_solutions('029A')
 assert part_one(['029A']) == 68*29
 assert part_one(['980A']) == 60*980
 assert part_one(['179A']) == 68*179
@@ -86,3 +124,7 @@ print(f'Part 1: {Fore.BLACK}{Back.GREEN}{part_one(common.Loader.load_lines())}{S
 # part 2 is 27 iterations (!!!)
 
 print(f'Part 2: {Fore.BLACK}{Back.GREEN}{part_two(common.Loader.load_lines())}{Style.RESET_ALL}')
+
+
+# Any "switch" will result in a "move" which will always have the same smallest signature in the end
+# it is bound to repeat?
