@@ -1,8 +1,5 @@
-from numpy.matlib import zeros
-
+from colorama import Fore, Back, Style
 import common
-from colorama import Fore,Back,Style
-
 
 
 def part_one(lines):
