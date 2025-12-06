@@ -36,12 +36,12 @@ class Loader:
             return [x.strip() if strip else x.strip('\n') for x in file.readlines()]
 
     @staticmethod
-    def load_matrix(filename=None, delimiter=None, numeric=False):
+    def load_matrix(filename=None, delimiter=None, numeric=False, strip=True):
         matrix = []
-        for line in Loader.load_lines(filename):
+        for line in Loader.load_lines(filename, strip=strip):
             if delimiter is None:
-                split = line.strip()
+                split = line.strip() if strip else line.strip('\n')
             else:
-                split = re.split(delimiter, line.strip())
+                split = re.split(delimiter, line.strip() if strip else line.strip('\n'))
             matrix.append([int(x) if numeric else x for x in split])
         return matrix

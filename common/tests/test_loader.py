@@ -4,6 +4,11 @@ import unittest
 
 class TestLoader(unittest.TestCase):
 
+    def test_load_matrix_keep_whitespaces(self):
+        matrix = Loader.load_matrix('data/matrix_keep_whitespaces.txt', strip=False)
+        result = [[' ', '1', '2', '3'], ['1', ' ', '2', ' ', '3'], ['1', ' ', '2', '3'], [' ', ' ', '1', ' ', ' '],['4', ' ', '5', ' ']]
+        assert matrix == result
+
     def test_load_matrix_nums(self):
         matrix = Loader.load_matrix('data/matrix_nums.txt', delimiter=' ', numeric=True)
         result = [[1, 2, 3, 4, 5], [11, 12, -5, 67, 24], [4, 3], [9, 9, 9, 9, 9, 9, 9, 9, 9]]
